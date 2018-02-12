@@ -45,7 +45,8 @@ module.exports = (app) => {
 
     //Tickets
     app.get('/api/getAllTickets', authRoutes, TicketController.getAllTickets);
-    app.get('/api/getTicket', authRoutes, TicketController.getTicket);
+    app.get('/api/getTicket/:ticketid', authRoutes, TicketController.getTicketById);
+    // app.get('/api/getTicketByEvent/:eventname', authRoutes, TicketController.getTicketsByEvent);
     app.post('/api/createTicket/:eventname', authRoutes, TicketController.createTicket);
     app.delete('/api/deleteTicket/:ticketid', authRoutes, TicketController.deleteTicket);
 };

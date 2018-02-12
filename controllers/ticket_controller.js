@@ -16,8 +16,8 @@ module.exports = {
             });
     },
 
-    getTicket(req, res, next) {
-        let ticketId = req.params.ticketId;
+    getTicketById(req, res, next) {
+        let ticketId = req.params.ticketid;
 
         Ticket.find({ticketId: ticketId})
             .then((ticket) => {
@@ -31,17 +31,39 @@ module.exports = {
             })
     },
 
-    // getTicketByEvent(req, res, next) {
-    //     let eventName = req.params.eventName;
-    //     let ticketId = req.params.ticketId;
+    // getTicketsByEvent(req, res, next) {
+    //     let eventname = req.params.eventname;
     //
-    //     Event.find({eventName: eventName})
+    //     Event.findOne({eventName: eventname})
     //         .then((event) => {
-    //             if(event !== null) {
-    //
+    //             console.log('1');
+    //             console.log(event.ticket.length);
+    //             for(let i = 0; i < event.ticket.length; i++) {
+    //                 console.log('2');
+    //                 Ticket.find({_id: event.ticket[i]})
+    //                     .then((ticket) => {
+    //                         console.log('3');
+    //                         console.log(ticket);
+    //                         res.json(ticket);
+    //                     });
+    //                 console.log(event.ticket);
+    //                 // Ticket.findOne({_id: t})
+    //                 //     .then((ticket) => {
+    //                 //         res.status(200);
+    //                 //         res.contentType('application/json');
+    //                 //         res.send(ticket);
+    //                 //     })
+    //                 //     .catch((error) => {
+    //                 //         console.log(error);
+    //                 //         return;
+    //                 //     })
     //             }
     //         })
-    // }
+    //         .catch((error) => {
+    //             console.log(error);
+    //             return;
+    //         })
+    // },
 
     createTicket(req, res, next) {
         let eventname = req.params.eventname;
