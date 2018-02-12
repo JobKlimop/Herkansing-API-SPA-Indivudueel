@@ -2,6 +2,8 @@ const mongodb = require('../config/mongo.db');
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const auth = require('../auth/authentication');
+const neo4j = require('../config/neo4j');
+
 
 module.exports = {
     register(req, res, next) {
@@ -38,7 +40,17 @@ module.exports = {
             .catch(err => {
                 res.status(500);
                 res.json({msg: 'Server error'})
+            });
+        neo4j.session
+            .run("CREATE (a:User {userName:'" + body.userName + "'})")
+            .then((result) => {
+                res.status(200);
+                console.log('RESPONSE NEO4J: ' + JSON.stringify(result));
+                neo4j.session.close();
             })
+            .catch((error) => {
+                console.log(error);
+            });
     },
 
     login(req, res, next) {
