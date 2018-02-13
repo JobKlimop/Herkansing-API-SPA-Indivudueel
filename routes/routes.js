@@ -2,7 +2,6 @@ const Authentication = require('../controllers/authentication_controller');
 const UserController = require('../controllers/user_controller');
 const EventController = require('../controllers/event_controller');
 const TicketController = require('../controllers/ticket_controller');
-const env = require('../config/env/env');
 const auth = require('../auth/authentication');
 const express = require('express');
 const authRoutes = express.Router();
@@ -48,5 +47,5 @@ module.exports = (app) => {
     app.get('/api/getTicket/:ticketid', authRoutes, TicketController.getTicketById);
     // app.get('/api/getTicketByEvent/:eventname', authRoutes, TicketController.getTicketsByEvent);
     app.post('/api/createTicket/:eventname', authRoutes, TicketController.createTicket);
-    app.delete('/api/deleteTicket/:ticketid', authRoutes, TicketController.deleteTicket);
+    app.delete('/api/deleteTicket/:eventname/:ticketid', authRoutes, TicketController.deleteTicket);
 };

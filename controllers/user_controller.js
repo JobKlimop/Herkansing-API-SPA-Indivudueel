@@ -1,5 +1,6 @@
 const mongodb = require('../config/mongo.db');
 const User = require('../models/user');
+const neo4j = require('../config/neo4j');
 
 module.exports = {
 

@@ -1,5 +1,6 @@
 const mongodb = require('../config/mongo.db');
 const Event = require('../models/event');
+const neo4j = require('../config/neo4j');
 
 module.exports = {
 
@@ -61,23 +62,41 @@ module.exports = {
             .catch((error) => {
                 res.status(500);
                 res.json({msg: 'Server error'});
+            });
+
+        neo4j.session
+            .run("CREATE (a:Event {eventName:'" + body.eventName + "'})")
+            .then((result) => {
+                res.status(200);
+                neo4j.session.close();
+            })
+            .catch((error) => {
+                console.log(error);
+                next();
             })
     },
 
     editEvent(req, res, next) {
         let newData = req.body;
         let eventname = req.params.eventname;
+        let newEventName = newData.eventName;
 
         Event.findOneAndUpdate({eventName: eventname}, newData)
-            .then(() => {
+            .then((body) => {
                 res.status(200);
                 res.contentType('application/json');
                 res.send(body);
             })
             .catch((error) => {
                 res.status(422);
+                console.log(error);
                 res.json({msg: 'Event could not be updated'});
             });
+
+        neo4j.session
+            .run("MATCH (a:Event {eventName:'" + eventname + "'})" +
+                "SET a.eventName = '" + newEventName + "'" +
+                "RETURN a")
     },
 
     deleteEvent(req, res, next) {

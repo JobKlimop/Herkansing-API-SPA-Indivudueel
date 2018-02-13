@@ -29,7 +29,20 @@ function decodeToken(token) {
     }
 }
 
+function getCurrentUser(token) {
+    try {
+        const payload = jwt.decode(token, env.secKey);
+
+        const currentUser = payload.sub;
+
+        return currentUser;
+    } catch(err) {
+        console.log(err);
+    }
+}
+
 module.exports = {
     encodeToken,
-    decodeToken
+    decodeToken,
+    getCurrentUser
 };
