@@ -97,6 +97,14 @@ module.exports = {
             .run("MATCH (a:Event {eventName:'" + eventname + "'})" +
                 "SET a.eventName = '" + newEventName + "'" +
                 "RETURN a")
+            .then(() => {
+                res.status(200);
+                neo4j.session.close;
+            })
+            .catch((error) => {
+                res.status(422);
+                console.log(error);
+            });
     },
 
     deleteEvent(req, res, next) {
@@ -107,6 +115,12 @@ module.exports = {
                 if(event !== null) {
                     Event.findOneAndRemove({eventName: eventname})
                         .then(() => {
+                            neo4j.session
+                                .run("MATCH (a:Event {eventName:'" + eventname + "'})" +
+                                    "DETACH DELETE a")
+                                .then(() => {
+                                    neo4j.session.close();
+                                });
                             res.status(200);
                             res.json({msg: 'Event deleted'});
                         })

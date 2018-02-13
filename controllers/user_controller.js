@@ -44,6 +44,13 @@ module.exports = {
                 if(user !== null) {
                     User.findOneAndRemove({userName: username})
                         .then(user => {
+                            neo4j.session
+                                .run("MATCH (a:User {userName:'" + username + "'})" +
+                                    "DETACH DELETE a")
+                                .then(() => {
+                                    neo4j.session.close();
+                                });
+
                             res.status(200);
                             res.json({msg: 'User deleted'});
                         })
