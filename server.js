@@ -15,7 +15,7 @@ app.use(bodyParser.json({
     type: 'application/vnd.api.json'
 }));
 
-app.set('port', (process.env.PORT || config.env.webPort));
+app.set('port', (config.env.webPort));
 app.set('env', (process.env.ENV || 'development'));
 
 app.use(function (req, res, next) {
