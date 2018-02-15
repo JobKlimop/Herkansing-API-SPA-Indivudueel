@@ -49,8 +49,8 @@ app.use('*', function(req, res) {
 });
 
 //Start connectie met server
-app.listen(config.env.webPort, function() {
-    console.log('The server is listening on port ' + app.get('port'));
+app.listen(config.env.webPort, () => {
+    console.log('The server is listening on port ' + config.env.webPort);
 });
 
 module.exports = app;

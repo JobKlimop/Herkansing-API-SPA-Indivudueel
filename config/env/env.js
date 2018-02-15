@@ -13,8 +13,15 @@ let dburl = process.env.NODE_ENV === 'production' ?
     'mongodb://' + env.dbUser + ':' + env.dbPassword + '@' + env.dbHost + ':' + env.dbPort + '/' + env.dbDatabase :
     'mongodb://localhost/' + env.dbDatabase;
 
+let username = 'Thomas';
+let password = 'b.YZu8QyqLbYBw.KpNzNFE8Bo26F9yM';
+let url = 'bolt://hobby-mbbmcodoeiibgbkejagmloal.dbs.graphenedb.com:24786';
+
 module.exports = {
     env: env,
     dburl: dburl,
+    username: username,
+    password: password,
+    url: url,
     secKey: secretKey
 };
