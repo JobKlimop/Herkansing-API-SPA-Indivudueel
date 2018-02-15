@@ -22,6 +22,16 @@ module.exports = {
             .then(user => {
                 if(user === null) {
                     User.create(userToCreate)
+                        .then(user => {
+                            res.status(200);
+                            res.contentType('application/json');
+                            res.send(user);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                            return;
+                        });
+
                     neo4j.session
                         .run("CREATE (a:User {userName:'" + body.userName + "'})")
                         .then((result) => {
@@ -31,15 +41,6 @@ module.exports = {
                         })
                         .catch((error) => {
                             console.log(error);
-                        })
-                        .then(user => {
-                            res.status(200);
-                            res.contentType('application/json');
-                            res.send(user);
-                        })
-                        .catch(error => {
-                            console.log(error);
-                            return;
                         });
                 } else {
                     res.status(401);
