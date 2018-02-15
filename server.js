@@ -15,7 +15,7 @@ app.use(bodyParser.json({
     type: 'application/vnd.api.json'
 }));
 
-app.set('port', (config.env.webPort));
+app.set('port', (process.env.PORT || config.env.webPort));
 app.set('env', (process.env.ENV || 'development'));
 
 app.use(function (req, res, next) {
@@ -50,7 +50,7 @@ app.use('*', function(req, res) {
 
 //Start connectie met server
 app.listen(config.env.webPort, () => {
-    console.log('The server is listening on port ' + config.env.webPort);
+    console.log('The server is listening on port ' + app.get('port'));
 });
 
 module.exports = app;
