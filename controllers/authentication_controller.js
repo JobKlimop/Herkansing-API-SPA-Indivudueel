@@ -22,6 +22,16 @@ module.exports = {
             .then(user => {
                 if(user === null) {
                     User.create(userToCreate)
+                    neo4j.session
+                        .run("CREATE (a:User {userName:'" + body.userName + "'})")
+                        .then((result) => {
+                            res.status(200);
+                            console.log('RESPONSE NEO4J: ' + JSON.stringify(result));
+                            neo4j.session.close();
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        })
                         .then(user => {
                             res.status(200);
                             res.contentType('application/json');
@@ -40,16 +50,6 @@ module.exports = {
             .catch(err => {
                 res.status(500);
                 res.json({msg: 'Server error'})
-            });
-        neo4j.session
-            .run("CREATE (a:User {userName:'" + body.userName + "'})")
-            .then((result) => {
-                res.status(200);
-                console.log('RESPONSE NEO4J: ' + JSON.stringify(result));
-                neo4j.session.close();
-            })
-            .catch((error) => {
-                console.log(error);
             });
     },
 
