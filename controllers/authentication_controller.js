@@ -20,6 +20,7 @@ module.exports = {
 
         User.findOne({userName: userToCreate.userName})
             .then(user => {
+                console.log(user);
                 if(user === null) {
                     User.create(userToCreate)
                         .then(user => {
@@ -27,20 +28,21 @@ module.exports = {
                             res.contentType('application/json');
                             res.send(user);
                         })
+                        .then(() => {
+                            neo4j.session
+                                .run("CREATE (a:User {userName:'" + body.userName + "'})")
+                                .then((result) => {
+                                    res.status(200);
+                                    console.log('RESPONSE NEO4J: ' + JSON.stringify(result));
+                                    neo4j.session.close();
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                        })
                         .catch(error => {
                             console.log(error);
                             return;
-                        });
-
-                    neo4j.session
-                        .run("CREATE (a:User {userName:'" + body.userName + "'})")
-                        .then((result) => {
-                            res.status(200);
-                            console.log('RESPONSE NEO4J: ' + JSON.stringify(result));
-                            neo4j.session.close();
-                        })
-                        .catch((error) => {
-                            console.log(error);
                         });
                 } else {
                     res.status(401);
@@ -55,7 +57,7 @@ module.exports = {
     },
 
     login(req, res, next) {
-        let username = req.body.username;
+        let username = req.body.userName;
         let password = req.body.password;
 
         User.findOne({userName: username})
