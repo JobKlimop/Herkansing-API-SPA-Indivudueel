@@ -8,7 +8,8 @@ const authRoutes = express.Router();
 
 module.exports = (app) => {
     authRoutes.use(function (req, res, next) {
-        let token = req.headers['x-access-token'];
+        let token = req.headers['authorization'];
+        console.log(token);
 
         if(token) {
             if(auth.decodeToken(token)){
