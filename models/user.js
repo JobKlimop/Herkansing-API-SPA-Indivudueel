@@ -3,6 +3,10 @@ const Schema = mongoose.Schema;
 const TicketSchema = require('./ticket');
 
 const UserSchema = new Schema({
+    userImageUrl: {
+        type: String,
+        required: false
+    },
     userName: {
         type: String,
         required: true

@@ -34,6 +34,7 @@ module.exports = {
 
         let eventToCreate = new Event();
         eventToCreate.eventName = body.eventName;
+        eventToCreate.eventImageUrl = body.eventImageUrl;
         eventToCreate.artist = body.artist;
         eventToCreate.eventDate = body.eventDate;
         eventToCreate.eventTime = body.eventTime;
@@ -49,6 +50,18 @@ module.exports = {
                             res.contentType('application/json');
                             res.send(event);
                         })
+                        .then(() => {
+                            neo4j.session
+                                .run("CREATE (a:Event {eventName:'" + body.eventName + "'})")
+                                .then((result) => {
+                                    res.status(200);
+                                    neo4j.session.close();
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                    next();
+                                });
+                        })
                         .catch((error) => {
                             console.log(error);
                             return;
@@ -63,17 +76,6 @@ module.exports = {
                 res.status(500);
                 res.json({msg: 'Server error'});
             });
-
-        neo4j.session
-            .run("CREATE (a:Event {eventName:'" + body.eventName + "'})")
-            .then((result) => {
-                res.status(200);
-                neo4j.session.close();
-            })
-            .catch((error) => {
-                console.log(error);
-                next();
-            })
     },
 
     editEvent(req, res, next) {
