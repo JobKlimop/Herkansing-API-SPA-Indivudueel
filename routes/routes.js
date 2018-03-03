@@ -8,17 +8,15 @@ const authRoutes = express.Router();
 
 module.exports = (app) => {
     authRoutes.use(function (req, res, next) {
-        let token = req.headers['authorization'];
-        console.log(token);
+        let token = req.headers.authorization;
 
         if(token) {
-            if(auth.decodeToken(token)){
+            if(auth.decodeToken(token.replace(/["]/g, ''))){
                 next();
             } else {
                 res.status(401);
                 res.contentType('application/json');
                 res.json({success: false, msg: 'Token expired'});
-
             }
         } else {
             res.status(401);
