@@ -40,6 +40,7 @@ module.exports = {
         eventToCreate.eventTime = body.eventTime;
         eventToCreate.location = body.location;
         eventToCreate.noOfTickets = body.noOfTickets;
+        eventToCreate.ticketTypes = body.ticketTypes;
 
         Event.findOne({eventName: eventToCreate.eventName})
             .then((event) => {

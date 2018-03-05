@@ -66,57 +66,41 @@ module.exports = {
     createTicket(req, res, next) {
         let eventname = req.params.eventname;
         let body = req.body;
-        let token = req.headers['x-access-token'];
+        let token = req.headers.authorization;
 
         let ticketToCreate = new Ticket();
-        ticketToCreate.ticketId = body.ticketId;
         ticketToCreate.ticketType = body.ticketType;
         ticketToCreate.ticketPrice = body.ticketPrice;
 
         let currentUser = auth.getCurrentUser(token);
 
-        Ticket.findOne({ticketId: ticketToCreate.ticketId})
+        Ticket.create(ticketToCreate)
             .then((ticket) => {
-                if(ticket === null) {
-                    Ticket.create(ticketToCreate)
-                        .then((ticket) => {
-                            Event.findOne({eventName: eventname})
-                                .then((event) => {
-                                    event.ticket.push(ticket);
-                                    event.save();
-                                });
-                            User.findOne({userName: currentUser})
-                                .then((user) => {
-                                    user.tickets.push(ticket);
-                                    user.save();
-                                });
-
-                            neo4j.session
-                                .run("MATCH (a:User {userName:'" + currentUser + "'}), " +
-                                    "(b:Event {eventName:'" + eventname + "'}) " +
-                                    "MERGE(a)-[:ATTENDS]->(b)")
-                                .then(() => {
-                                    neo4j.session.close()
-                                });
-
-                            res.status(200);
-                            res.contentType('application/json');
-                            res.send(ticket);
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                            res.status(401);
-                            res.json({msg: 'Error occured, try again later'});
-                        })
-                } else {
-                    res.status(401);
-                    res.contentType('application/json');
-                    res.json({msg: 'Ticket already sold, please try again'});
-                }
-            })
+                Event.findOne({eventName: eventname})
+                    .then((event) => {
+                        event.ticket.push(ticket);
+                        event.save();
+                        });
+                User.findOne({userName: currentUser})
+                    .then((user) => {
+                        user.tickets.push(ticket);
+                        user.save();
+                        });
+                neo4j.session
+                    .run("MATCH (a:User {userName:'" + currentUser + "'}), " +
+                        "(b:Event {eventName:'" + eventname + "'}) " +
+                        "MERGE(a)-[:ATTENDS]->(b)")
+                    .then(() => {
+                        neo4j.session.close()
+                    });
+                res.status(200);
+                res.contentType('application/json');
+                res.send(ticket);
+                })
             .catch((error) => {
-                res.status(500);
-                res.json({msg: 'Server error'});
+                console.log(error);
+                res.status(401);
+                res.json({msg: 'Error occured, try again later'});
             });
     },
 

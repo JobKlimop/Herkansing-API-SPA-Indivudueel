@@ -3,10 +3,6 @@ const Schema = mongoose.Schema;
 const EventSchema = require('./event');
 
 const TicketSchema = new Schema({
-    ticketId: {
-        type: Number,
-        required: true
-    },
     ticketType: {
         type: String,
         required: true

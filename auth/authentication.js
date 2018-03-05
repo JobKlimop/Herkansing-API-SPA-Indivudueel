@@ -31,7 +31,8 @@ function decodeToken(token) {
 
 function getCurrentUser(token) {
     try {
-        const payload = jwt.decode(token, env.secKey);
+        const repToken = token.replace(/["]/g, '');
+        const payload = jwt.decode(repToken, env.secKey);
 
         const currentUser = payload.sub;
 

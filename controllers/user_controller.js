@@ -1,6 +1,7 @@
 const mongodb = require('../config/mongo.db');
 const User = require('../models/user');
 const neo4j = require('../config/neo4j');
+const auth = require('../auth/authentication');
 
 module.exports = {
 
@@ -21,6 +22,19 @@ module.exports = {
                 res.status(200).send(user);
             })
             .catch((error) => res.status(401).json(error));
+    },
+
+    getCurrentUserByUsername(req, res, next) {
+        let token = req.headers.authorization;
+        let username = auth.getCurrentUser(token);
+
+        User.findOne({userName: username})
+            .then((user) => {
+                res.status(200).send(user);
+            })
+            .catch((error) => {
+                res.status(401).json(error)
+            });
     },
 
     edit(req, res, next) {

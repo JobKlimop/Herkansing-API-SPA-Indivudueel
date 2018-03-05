@@ -30,6 +30,16 @@ const EventSchema = new Schema({
         type: Number,
         required: true
     },
+    ticketTypes: [{
+        ticketType: {
+            type: String,
+            required: true
+        },
+        price: {
+            type: Number,
+            required: true
+        }
+    }],
     ticket: [{
         type: Schema.Types.ObjectId,
         ref:'ticket'

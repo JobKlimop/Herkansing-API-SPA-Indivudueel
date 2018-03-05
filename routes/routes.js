@@ -32,6 +32,7 @@ module.exports = (app) => {
     //Users
     app.get('/api/getAllUsers', authRoutes, UserController.getAllUsers);
     app.get('/api/getUser/:username', authRoutes, UserController.getOneUser);
+    app.get('/api/getCurrentUser', authRoutes, UserController.getCurrentUserByUsername);
     app.delete('/api/deleteUser/:username', authRoutes, UserController.delete);
 
     //Events
