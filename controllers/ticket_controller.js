@@ -69,10 +69,12 @@ module.exports = {
         let token = req.headers.authorization;
 
         let ticketToCreate = new Ticket();
-        ticketToCreate.ticketType = body.ticketType;
-        ticketToCreate.ticketPrice = body.ticketPrice;
+        ticketToCreate.ticketType = body.ticketType.ticketType;
+        ticketToCreate.ticketPrice = body.ticketType.price;
 
         let currentUser = auth.getCurrentUser(token);
+
+        console.log(body);
 
         Ticket.create(ticketToCreate)
             .then((ticket) => {
