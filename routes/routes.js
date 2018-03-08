@@ -38,6 +38,7 @@ module.exports = (app) => {
     //Events
     app.get('/api/getAllEvents', authRoutes, EventController.getAllEvents);
     app.get('/api/getEvent/:eventname', authRoutes, EventController.getEvent);
+    app.get('/api/getUserEvents/', authRoutes, EventController.getUserEvents);
     app.post('/api/createEvent', authRoutes, EventController.addEvent);
     app.put('/api/editEvent/:eventname', authRoutes, EventController.editEvent);
     app.delete('/api/deleteEvent/:eventname', authRoutes, EventController.deleteEvent);
@@ -45,7 +46,6 @@ module.exports = (app) => {
     //Tickets
     app.get('/api/getAllTickets', authRoutes, TicketController.getAllTickets);
     app.get('/api/getTicket/:ticketid', authRoutes, TicketController.getTicketById);
-    // app.get('/api/getTicketByEvent/:eventname', authRoutes, TicketController.getTicketsByEvent);
     app.post('/api/createTicket/:eventname', authRoutes, TicketController.createTicket);
     app.delete('/api/deleteTicket/:eventname/:ticketid', authRoutes, TicketController.deleteTicket);
 };

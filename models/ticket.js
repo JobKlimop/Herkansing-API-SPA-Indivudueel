@@ -1,8 +1,15 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const EventSchema = require('./event');
 
 const TicketSchema = new Schema({
+    user: [{
+        type: String,
+        required: true
+    }],
+    event: [{
+        type: String,
+        required: true
+    }],
     ticketType: {
         type: String,
         required: true

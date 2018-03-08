@@ -67,12 +67,13 @@ module.exports = {
         let eventname = req.params.eventname;
         let body = req.body;
         let token = req.headers.authorization;
+        let currentUser = auth.getCurrentUser(token);
 
         let ticketToCreate = new Ticket();
+        ticketToCreate.user = currentUser;
+        ticketToCreate.event = eventname;
         ticketToCreate.ticketType = body.ticketType.ticketType;
         ticketToCreate.ticketPrice = body.ticketType.price;
-
-        let currentUser = auth.getCurrentUser(token);
 
         console.log(body);
 

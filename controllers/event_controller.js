@@ -1,6 +1,9 @@
 const mongodb = require('../config/mongo.db');
 const Event = require('../models/event');
 const neo4j = require('../config/neo4j');
+const auth = require('../auth/authentication');
+const User = require('../models/user.js');
+const Ticket = require('../models/ticket.js')
 
 module.exports = {
 
@@ -26,6 +29,40 @@ module.exports = {
             .catch((error) => {
                 res.status(404);
                 res.json({msg: 'Event not found'});
+            })
+    },
+
+    getUserEvents(req, res, next) {
+        let token = req.headers.authorization;
+        let currentUser = auth.getCurrentUser(token);
+
+        neo4j.session
+            .run(
+            'MATCH (a:User {userName: "' + currentUser + '"})-[:ATTENDS]-(b:Event) RETURN b'
+            )
+            .then((response) => {
+                // for(events in response.records) {
+                    // Event.find({eventName: events._fields[0].properties.eventName})
+                    //     .then((response) => {
+                    //         eventsToSend.push(response);
+                    //     });
+                //     console.log(events);
+                // }
+
+                const eventnames = response.records.map(x => x._fields[0].properties.eventName)
+                console.log(eventnames);
+                console.log(eventnames.length);
+                Event.find({eventName: eventnames})
+                    .then((response) => {
+                        console.log(response);
+                        res.status(200);
+                        res.send(response);
+                    })
+            })
+            .catch((error) => {
+                res.status(400);
+                console.log(error);
+                res.json({msg: 'Error on getting events'});
             })
     },
 
