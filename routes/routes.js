@@ -33,12 +33,14 @@ module.exports = (app) => {
     app.get('/api/getAllUsers', authRoutes, UserController.getAllUsers);
     app.get('/api/getUser/:username', authRoutes, UserController.getOneUser);
     app.get('/api/getCurrentUser', authRoutes, UserController.getCurrentUserByUsername);
+    app.put('/api/editUser', authRoutes, UserController.editUser);
     app.delete('/api/deleteUser/:username', authRoutes, UserController.delete);
 
     //Events
     app.get('/api/getAllEvents', authRoutes, EventController.getAllEvents);
     app.get('/api/getEvent/:eventname', authRoutes, EventController.getEvent);
     app.get('/api/getUserEvents/', authRoutes, EventController.getUserEvents);
+    app.get('/api/getAttendingUsers/:eventname', EventController.getAttendingUsers);
     app.post('/api/createEvent', authRoutes, EventController.addEvent);
     app.put('/api/editEvent/:eventname', authRoutes, EventController.editEvent);
     app.delete('/api/deleteEvent/:eventname', authRoutes, EventController.deleteEvent);

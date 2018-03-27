@@ -3,7 +3,7 @@ const Event = require('../models/event');
 const neo4j = require('../config/neo4j');
 const auth = require('../auth/authentication');
 const User = require('../models/user.js');
-const Ticket = require('../models/ticket.js')
+const Ticket = require('../models/ticket.js');
 
 module.exports = {
 
@@ -49,7 +49,7 @@ module.exports = {
                 //     console.log(events);
                 // }
 
-                const eventnames = response.records.map(x => x._fields[0].properties.eventName)
+                const eventnames = response.records.map(x => x._fields[0].properties.eventName);
                 console.log(eventnames);
                 console.log(eventnames.length);
                 Event.find({eventName: eventnames})
@@ -64,6 +64,26 @@ module.exports = {
                 console.log(error);
                 res.json({msg: 'Error on getting events'});
             })
+    },
+
+    getAttendingUsers(req, res, next) {
+        // let token = req.headers.authorization;
+        // let currentUser = auth.getCurrentUser(token);
+        let eventname = req.params.eventname;
+
+        neo4j.session
+            .run(
+                'MATCH (a:Event {eventName: "' + eventname + '"})-[:ATTENDS]-(b:User) RETURN b'
+            )
+            .then((response) => {
+                const usernames = response.records.map(x => x._fields[0].properties.userName);
+                User.find({userName: usernames})
+                    .then((users) => {
+                    console.log(users);
+                    res.status(200);
+                    res.send(users);
+                });
+            });
     },
 
     addEvent(req, res, next) {

@@ -37,15 +37,15 @@ module.exports = {
             });
     },
 
-    edit(req, res, next) {
+    editUser(req, res, next) {
         let newData = req.body;
-        let username = req.params.username;
+        let username = auth.getCurrentUser(req.headers.authorization);
 
         User.findOneAndUpdate({userName: username}, newData)
-            .then(() => {
+            .then((response) => {
                 res.status(200);
                 res.contentType('application/json');
-                res.send(body);
+                res.send(response);
             })
             .catch(next);
     },
