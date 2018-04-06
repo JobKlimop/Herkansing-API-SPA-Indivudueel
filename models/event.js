@@ -6,7 +6,7 @@ const EventSchema = new Schema({
         type: String,
         required: true
     },
-    eventImageUrl: {
+    eventImage: {
         type: String,
         required: false
     },

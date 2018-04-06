@@ -38,6 +38,8 @@ app.use(function (req, res, next) {
     }
 });
 
+app.use('/upload/' + express.static('upload'));
+
 app.use(bodyParser.json());
 routes(app);
 
