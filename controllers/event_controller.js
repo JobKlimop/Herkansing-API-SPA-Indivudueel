@@ -90,15 +90,16 @@ module.exports = {
         // console.log(req);
         console.log('1');
         console.log(req.body);
-        console.log('2');
-        console.log(req.file);
+        // console.log('2');
+        // console.log(req.file);
         // console.log(req.file);
         // console.log(req.file.originalname);
         let body = req.body;
 
         let eventToCreate = new Event();
         eventToCreate.eventName = body.eventName;
-        eventToCreate.eventImage = req.file.path;
+        // eventToCreate.eventImage = req.file.path;
+        eventToCreate.eventImageUrl = body.eventImageUrl;
         eventToCreate.artist = body.artist;
         eventToCreate.eventDate = body.eventDate;
         eventToCreate.eventTime = body.eventTime;

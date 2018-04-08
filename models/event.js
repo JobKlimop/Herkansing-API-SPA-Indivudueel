@@ -10,6 +10,10 @@ const EventSchema = new Schema({
         type: String,
         required: false
     },
+    eventImageUrl: {
+        type: String,
+        required: false
+    },
     artist: {
         type: String,
         required: true

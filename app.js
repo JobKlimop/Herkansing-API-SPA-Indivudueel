@@ -12,6 +12,8 @@ if(process.env.NODE_ENV !== 'test') {
     mongoose.createConnection('mongodb://localhost/ticketking_test');
 }
 
+app.use(bodyParser.json());
+
 app.all('*', function(req, res, next) {
     next();
 });
@@ -40,7 +42,6 @@ app.use(function (req, res, next) {
 
 app.use('/upload/' + express.static('upload'));
 
-app.use(bodyParser.json());
 routes(app);
 
 app.use((err, req, res, next) => {

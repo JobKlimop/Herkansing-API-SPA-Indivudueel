@@ -4,7 +4,7 @@ const env = require('../config/env/env');
 
 function encodeToken(username) {
     const payload = {
-        exp: moment().add(15, 'minutes').unix(),
+        exp: moment().add(10, 'minutes').unix(),
         iat: moment().unix(),
         sub: username
     };
